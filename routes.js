@@ -32,5 +32,29 @@ router.post('/userDetail', async (req, res) => {
     }
 });
 
+router.post('/loginUser', async (req, res) => {
+
+    try {
+        const { email, password } = req.body;
+
+        const query = 'SELECT * FROM users WHERE email = $1 AND password = $2';
+        const values = [email, password];
+
+        const user = await pool.query(query, values);
+
+        if (user.rows.length > 0) {
+            console.log("User logged in successfully");
+            res.status(200).json({ message: 'Login successful', user: user.rows[0] });
+        } else {
+            console.log("Invalid credentials");
+            res.status(401).json({ error: 'Invalid credentials' });
+        }
+
+    } catch (error) {
+        console.error('Error logging in user', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 
 export default router;
