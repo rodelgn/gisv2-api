@@ -1,14 +1,9 @@
 import express from 'express';
 import pool from './db.js';
 import bodyParser from 'body-parser';
-import cors from 'cors';
 import bcrypt from 'bcrypt';
 
-const hashedPassword = await bcrypt.hash(password, 10);
-
 const router = express.Router();
-
-router.use(cors());
 router.use(bodyParser.json());
 
 router.get ('/userDetail', async (req, res) => {
@@ -25,11 +20,14 @@ router.post('/userDetail', async (req, res) => {
     const { name, email, password } = req.body;
 
     try {
+       
+      const hashedPassword = await bcrypt.hash(password, 10);
+
         const insertQuery = 'INSERT INTO users (name, email, password) VALUES ($1, $2, $3)';
-        const values = [name, email, password];
+        const values = [name, email, hashedPassword];
 
         await pool.query(insertQuery, values);
-        console.log("User Created");
+        console.log("User Created Successfully");
         res.status(201).json({ message: 'User created successfully' });
     } catch (error) {
         console.error('Error creating user', error);
@@ -53,7 +51,7 @@ router.post('/loginUser', async (req, res) => {
         if (!validPassword) {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
-
+        console.log("User Logged In Successfully");
         res.status(200).json({ 
             status: 'ok',
             user: { 
