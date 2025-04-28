@@ -6,6 +6,7 @@ import bcrypt from 'bcrypt';
 const router = express.Router();
 router.use(bodyParser.json());
 
+//get all users
 router.get ('/userDetail', async (req, res) => {
     try {
       const { rows } = await pool.query('SELECT * FROM users');
@@ -16,6 +17,7 @@ router.get ('/userDetail', async (req, res) => {
     }
   });
 
+  //create user route
 router.post('/userDetail', async (req, res) => {
     const { name, email, password } = req.body;
 
@@ -28,13 +30,17 @@ router.post('/userDetail', async (req, res) => {
 
         await pool.query(insertQuery, values);
         console.log("User Created Successfully");
-        res.status(201).json({ message: 'User created successfully' });
+        res.status(201).json({ 
+          status: 'ok', 
+          message: 'User created successfully' 
+        });
     } catch (error) {
         console.error('Error creating user', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
+//login user route
 router.post('/loginUser', async (req, res) => {
 
     try {
