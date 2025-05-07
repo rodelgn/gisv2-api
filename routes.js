@@ -73,5 +73,38 @@ router.post('/loginUser', async (req, res) => {
     }
 });
 
+//Getting all Plotting Data
+router.get('/plottingData', async (req, res) => {
+  try {
+    const { rows } = await pool.query('SELECT * FROM titles');
+    res.status(200).json(rows);
+
+  } catch (error) {
+    console.log('Error Getting Datas: ', error);
+  }
+})
+
+// Insert Plotting data route
+router.post('/plottingData', async (req, res) => {
+  const { titleNo, owner, date, surveyNo, lotNo, blkNo, area, monument, easting, northing, pluscode } = req.body;
+
+  try {
+
+    const plotData = 'INSERT INTO titles (title_no, title_name, date, survey_no, lot_no, blk_no, area, monument, easting, northing, pluscode) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)';
+    const values = [ titleNo, owner, date, surveyNo, lotNo, blkNo, area, monument, easting, northing, pluscode ];
+    await pool.query(plotData, values);
+
+       console.log("Data Saved");
+        res.status(201).json({ 
+          status: 'ok', 
+          message: 'Data saved succesfully' 
+        });
+
+  } catch (err) {
+    console.log('Error Saving Data: ', err);
+  }
+
+})
+
 
 export default router;
