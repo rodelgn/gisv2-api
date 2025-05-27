@@ -41,6 +41,8 @@ const db = {
             monument VARCHAR(100) NOT NULL,
             easting VARCHAR(100) NOT NULL,
             northing VARCHAR(100) NOT NULL,
+            geojson JSON NOT NULL,
+            the_geom GEOMETRY(Polygon, 4326),
             pluscode VARCHAR(100) NOT NULL
         )`);
 

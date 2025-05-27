@@ -86,12 +86,16 @@ router.get('/plottingData', async (req, res) => {
 
 // Insert Plotting data route
 router.post('/plottingData', async (req, res) => {
-  const { titleNo, owner, date, surveyNo, lotNo, blkNo, area, monument, easting, northing, pluscode } = req.body;
+  const { titleNo, owner, date, surveyNo, lotNo, blkNo, area, monument, easting, northing, geojson, pluscode } = req.body;
+
+  const geojsonFormat = JSON.parse(geojson);
+  const geoType = geojsonFormat.geometry.type;
+  const coordinates = geojsonFormat.geometry.coordinates;
 
   try {
 
-    const plotData = 'INSERT INTO titles (title_no, title_name, date, survey_no, lot_no, blk_no, area, monument, easting, northing, pluscode) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)';
-    const values = [ titleNo, owner, date, surveyNo, lotNo, blkNo, area, monument, easting, northing, pluscode ];
+    const plotData = 'INSERT INTO titles (title_no, title_name, date, survey_no, lot_no, blk_no, area, monument, easting, northing, pluscode) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, ST_SetSRID(ST_GeomFromGeoJSON($17), $13)';
+    const values = [ titleNo, owner, date, surveyNo, lotNo, blkNo, area, monument, easting, northing, JSON.stringify(geojsonFormat), JSON.stringify({ type: geoType, coordinates }), pluscode ];
     await pool.query(plotData, values);
 
        console.log("Data Saved");
