@@ -76,13 +76,31 @@ router.post('/loginUser', async (req, res) => {
 //Getting all Plotting Data
 router.get('/plottingData', async (req, res) => {
   try {
-    const { rows } = await pool.query('SELECT * FROM titles');
-    res.status(200).json(rows);
+    const { rows } = await pool.query('SELECT id, title_no, title_name, geojson FROM titles');
+
+    const features = rows.map(row => {
+      const geometry = row.geojson; 
+      return {
+        type: 'Feature',
+        geometry,
+        properties: {
+          id: row.id,
+          title_no: row.title_no,
+          title_name: row.title_name
+        }
+      };
+    });
+
+    res.json({
+      type: "FeatureCollection",
+      features
+    });
 
   } catch (error) {
     console.log('Error Getting Datas: ', error);
+    res.status(500).json({ error: "Server error fetching plotting data." });
   }
-})
+});
 
 // Insert Plotting data route
 router.post('/plottingData', async (req, res) => {
@@ -104,7 +122,7 @@ router.post('/plottingData', async (req, res) => {
     console.log('Error Saving Data: ', err);
   }
 
-})
+});
 
 
 export default router;
