@@ -76,7 +76,7 @@ router.post('/loginUser', async (req, res) => {
 //Getting all Plotting Data
 router.get('/plottingData', async (req, res) => {
   try {
-    const { rows } = await pool.query('SELECT id, title_no, title_name, geojson FROM titles');
+    const { rows } = await pool.query('SELECT id, title_no, title_name, geojson, pluscode FROM titles');
 
     const features = rows.map(row => {
       const geometry = row.geojson; 
@@ -86,7 +86,8 @@ router.get('/plottingData', async (req, res) => {
         properties: {
           id: row.id,
           title_no: row.title_no,
-          title_name: row.title_name
+          title_name: row.title_name,
+          pluscode: row.pluscode
         }
       };
     });
