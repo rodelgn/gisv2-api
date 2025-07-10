@@ -40,10 +40,18 @@ const db = {
             area VARCHAR(100) NOT NULL,
             monument VARCHAR(100) NOT NULL,
             easting VARCHAR(100) NOT NULL,
+            
             northing VARCHAR(100) NOT NULL,
             geojson JSON NOT NULL,
             the_geom GEOMETRY(Polygon, 4326),
             pluscode VARCHAR(100) NOT NULL
+        )`);
+
+        await pool.query(`CREATE TABLE IF NOT EXISTS monuments (
+            id SERIAL PRIMARY KEY, 
+            monument VARCHAR(100) NOT NULL,
+            easting VARCHAR(100) NOT NULL,
+            northing VARCHAR(100) NOT NULL
         )`);
 
     } catch (error) {
