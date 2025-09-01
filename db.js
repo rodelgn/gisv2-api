@@ -4,8 +4,8 @@ import { Client } from 'pg';
 const db = {
     user: "postgres",
     host: "localhost",
-    database: "gis-clone",
     password: "admin",
+    database: "gis-clone",
     port: 5432,
   };
 
