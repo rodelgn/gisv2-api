@@ -38,10 +38,9 @@ const db = {
             lot_no VARCHAR(100) NOT NULL,
             blk_no VARCHAR(100) NOT NULL,
             area VARCHAR(100) NOT NULL,
-            monument VARCHAR(100) NOT NULL,
-            easting VARCHAR(100) NOT NULL,
-            
-            northing VARCHAR(100) NOT NULL,
+            monument VARCHAR(100),
+            easting VARCHAR(100),
+            northing VARCHAR(100),
             geojson JSON NOT NULL,
             the_geom GEOMETRY(Polygon, 4326),
             pluscode VARCHAR(100) NOT NULL
