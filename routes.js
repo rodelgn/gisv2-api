@@ -129,7 +129,7 @@ router.post('/plottingData', async (req, res) => {
 
 router.get('/monumentData', async (req, res ) => {
   try {
-    const {rows} = await pool.query('SELECT id, monument, easting, northing');
+    const {rows} = await pool.query('SELECT id, monument, easting, northing from monuments');
     res.status(200).json(rows);
   } catch (error) {
     console.log('Error Getting Datas: ', error);
